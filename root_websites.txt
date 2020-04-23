@@ -1,0 +1,2 @@
+https://www.ndtv.com/latest/page-{}
+https://timesofindia.indiatimes.com/news/{}
