@@ -16,7 +16,7 @@ if __name__ == "__main__":
         root_sites = [ x.replace('\n','') for x in f.readlines()]
         f.close()
 
-    no_of_pages = 1
+    no_of_pages = 3
 
     crawler = Crawler(root_sites, no_of_pages)
     news_agency_list = crawler.get_news_agency_list()
