@@ -14,32 +14,35 @@ class News:
 
     def add_articles(self):
         for i in range(len(self.headlines)):
-            article = Article(self.agency, self.headlines[i], self.links[i])
-            if len(article.date) == 0:
-                if len(self.articles) == 0:
-                    article.date = datetime.datetime.now().strftime('%d/%m/%Y')
-                else:
-                    article.date = self.articles[-1].date
-            if article.details_available == True and len(article.body) != 0:
-                print(article.link+ ' added')
-                self.articles.append(article)
+            try:
+                article = Article(self.agency, self.headlines[i], self.links[i])
+                if len(article.date) == 0:
+                    if len(self.articles) == 0:
+                        article.date = datetime.datetime.now().strftime('%d/%m/%Y')
+                    else:
+                        article.date = self.articles[-1].date
+                if article.details_available == True and len(article.body) != 0:
+                    print(article.link+ ' added')
+                    self.articles.append(article)
+            except:
+                print('index error')
 
     def get_articles(self):
         details_dict = dict()
-        details_dict['agency'] = []
-        details_dict['headline'] = []
-        details_dict['link'] = []
+        details_dict['name'] = []
+        details_dict['title'] = []
+        details_dict['url'] = []
         details_dict['date'] = []
         details_dict['keywords'] = []
-        details_dict['body'] = []
+        details_dict['content'] = []
 
         for article in self.articles:
-            details_dict['agency'].append(article.agency)
-            details_dict['headline'].append(article.headline)
-            details_dict['link'].append(article.link)
+            details_dict['name'].append(article.agency)
+            details_dict['title'].append(article.headline)
+            details_dict['url'].append(article.link)
             details_dict['date'].append(article.date)
             details_dict['keywords'].append(article.keywords)
-            details_dict['body'].append(article.body)
+            details_dict['content'].append(article.body)
 
         return details_dict
 
@@ -82,7 +85,7 @@ class Article:
             try:
                 self.date = datetime.datetime.strptime([re.search(r'[0-9]*\s[A-Za-z]*\s[0-9]*', x).group(0) for x in
                                                         tree.xpath('//meta[@name="publish-date"]/@content')][0],
-                                                       '%d %b %Y').strftime('%d/%m/%Y')
+                                                       '%d %b %Y').strftime('%Y-%m-%d')
                 self.time = \
                     [re.search(r'[0-9]*:[0-9]*', x).group(0) for x in
                      tree.xpath('//meta[@name="publish-date"]/@content')][
@@ -92,7 +95,7 @@ class Article:
                 self.date = ''
 
             try:
-                self.keywords = [x for x in tree.xpath('//meta[@name="news_keywords"]/@content')][0].split(',')
+                self.keywords = [x for x in tree.xpath('//meta[@name="news_keywords"]/@content')][0]
             except:
                 print('keyword error')
                 self.details_available = False
@@ -129,7 +132,7 @@ class Article:
                 self.date = ''
 
             try:
-                self.keywords = [x for x in tree.xpath('//meta[@name="keywords"]/@content')][0].split(',')
+                self.keywords = [x for x in tree.xpath('//meta[@name="keywords"]/@content')][0]
             except:
                 print('keyword error')
                 self.details_available = False
@@ -149,4 +152,4 @@ class Article:
                 self.details_available = False
 
         body_tokens = word_tokenize(text)
-        self.body = list(set(map(lambda x: x.lower(), [word for word in body_tokens if not word in stopwords.words()])))
+        self.body = ' '.join(list(set(map(lambda x: x.lower(), [word for word in body_tokens if not word in stopwords.words()]))))

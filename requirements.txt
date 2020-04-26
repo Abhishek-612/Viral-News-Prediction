@@ -1,4 +1,6 @@
-pandas==1.0.3
 nltk==3.5
+newsapi_python==0.2.6
 lxml==4.5.0
 requests==2.23.0
+pandas==1.0.3
+newsapi==0.1.1
