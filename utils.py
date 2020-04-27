@@ -10,6 +10,8 @@ def get_content_list(dataframe):
     titles_list = [str(all_titles[x]) for x in unique(all_titles)]
     content_list = [str(all_content[x]) for x in unique(all_content)]
 
+    # for t in titles_list:
+    #     print(len(t))
     return titles_list, content_list
 
 
@@ -41,7 +43,7 @@ def generate_corpus(model,word_collection):
     corpus = [preprocess(title) for title in word_collection]
     corpus, word_collection = filter_docs(corpus, word_collection, lambda doc: has_vector_representation(model, doc))
     corpus, word_collection = filter_docs(corpus, word_collection, lambda doc: (len(doc) != 0))
-    return corpus, word_collection
+    return word_collection
 
 
 def fetch_all_words(word_collection):
