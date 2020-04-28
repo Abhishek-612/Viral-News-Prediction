@@ -1,5 +1,5 @@
 import pandas as pd
-import os
+import os,re
 from fbprophet import Prophet
 from matplotlib import pyplot as plt
 
@@ -30,15 +30,12 @@ class FBProphetPredictor:
             m.plot(self.prediction)
             m.plot(self.prediction)
             self.get_virality()
-            if not os.path.exists('datasets/top headlines/'+title):
-                os.makedirs('datasets/top headlines/'+title)
-            plt.savefig(os.path.join('datasets/top headlines/'+title,str('twitter_graph.png')))
+            plt.savefig(os.path.join('results/top headlines/'+re.sub(r'[^\w\s]','',title),str('twitter_graph.png')))
         except ValueError:
-            if self.data_init.shape[0] < 2:
+            if self.data_init.shape[0] < 5:
                 print('Not enough data...Hence, not viral')
                 self.score = 0
             else:
-                print('Definitely viral')
                 self.score = 60
                 self.date = self.data['ds'].max()
 
@@ -58,7 +55,7 @@ class FBProphetPredictor:
             p = i + len(self.data['ds'])
             if self.prediction['yhat'][p] >= prev:
                 flag = True
-                prev = self.prediction['yhat'][p - 24]
+                prev = self.prediction['yhat'][(p - 24) if p>24 else 0]
                 if self.date is None:
                     self.date = self.prediction['ds'][p]
             else:

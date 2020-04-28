@@ -27,6 +27,8 @@ Since we use two different approaches and environments to analyse the prediction
 
 The score assignment gives **40%** weightage to the Word2Vec model and **60%** to the Twitter data analysis for the next 7 days, since the scope of the former is limited to how many news sites cover the topic, while the latter provides an estimate of number of people who reacted to the topic. 
 
+**_Sample output in [results](results) directory_**
+
 ## References
 1. https://towardsdatascience.com/using-word2vec-to-analyze-news-headlines-and-predict-article-success-cdeda5f14751
 2. https://www.hpl.hp.com/research/scl/papers/newsprediction/pulse.pdf

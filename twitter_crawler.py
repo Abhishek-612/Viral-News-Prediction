@@ -26,11 +26,15 @@ class TwitterClient:
 
     self.twitter_user = twitter_user
 
-  def fetch_related_tweets(self,query, num_tweets=250):
+  def fetch_related_tweets(self,query, num_tweets=300):
     tweets = []
     import datetime
-    for tweet in Cursor(self.twitter_client.search, q=query, until=datetime.date.today(), lang="en").items(num_tweets):
-      tweets.append(tweet)
+    try:
+        for tweet in Cursor(self.twitter_client.search, q=query, until=datetime.date.today(), lang="en").items(num_tweets):
+          tweets.append(tweet)
+    except:
+        print('Tweepy error. Try in 15 minutes')
+
     return tweets
 
 
