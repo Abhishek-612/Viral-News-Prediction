@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 from fbprophet import Prophet
 from matplotlib import pyplot as plt
 
@@ -18,7 +19,7 @@ class FBProphetPredictor:
         self.data = df.reset_index()
         self.score = 0
 
-    def predict(self):
+    def predict(self,title):
         m = Prophet(changepoint_prior_scale=0.15)
         train = self.data
 
@@ -27,9 +28,11 @@ class FBProphetPredictor:
 
             self.prediction = m.predict(m.make_future_dataframe(periods=170, freq='H'))
             m.plot(self.prediction)
-            m.plot_components(self.prediction)
+            m.plot(self.prediction)
             self.get_virality()
-            plt.show()
+            if not os.path.exists('datasets/top headlines/'+title):
+                os.makedirs('datasets/top headlines/'+title)
+            plt.savefig(os.path.join('datasets/top headlines/'+title,str('twitter_graph.png')))
         except ValueError:
             if self.data_init.shape[0] < 2:
                 print('Not enough data...Hence, not viral')

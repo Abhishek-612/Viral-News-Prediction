@@ -2,7 +2,9 @@ from newsapi import NewsApiClient
 import requests, os
 import pandas as pd
 import nltk
-
+from api_credentials import API_KEY
+import warnings
+warnings.filterwarnings("ignore")
 try:
     nltk.data.find('tokenizer/punkt')
 except LookupError:
@@ -14,9 +16,9 @@ try:
 except LookupError:
     nltk.download('stopwords')
 
-key = '0b74da0a4fd14dfb9500bcc33685ba6d'
+
 with requests.Session() as session:
-    newsapi = NewsApiClient(api_key=key, session=session)
+    newsapi = NewsApiClient(api_key=API_KEY, session=session)
 
 
 def create_dataframe(articles):
@@ -39,17 +41,11 @@ def get_articles(headlines_df):
     today = datetime.datetime.today()
     before_15_days = today - datetime.timedelta(15)
 
-    keywords_set = set()
-    for k in headlines_df['keywords']:
-        keywords_set.update(k.split(','))
-
-    keywords = [word for word in keywords_set if word not in set(stopwords.words('english')) and word.isalpha()]
-
     with requests.Session() as session:
         all_articles = []
-        for keyword in keywords:
+        for headline in headlines_df:
             try:
-                articles = newsapi.get_everything(q=keyword,
+                articles = newsapi.get_everything(q=headline['title'],
                                                   from_param=today.strftime('%Y-%m-%d'),
                                                   to=before_15_days.strftime('%Y-%m-%d'),
                                                   language='en',

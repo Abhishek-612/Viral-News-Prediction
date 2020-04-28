@@ -25,7 +25,7 @@ We use [Twitter](https://developer.twitter.com/en) as the platform to detect imp
 ## Scoring 
 Since we use two different approaches and environments to analyse the prediction, we use a scoring metric to calculate the virality. The idea of using score assignment was inspired by Roja Bandari et al [[Ref. 2](https://www.hpl.hp.com/research/scl/papers/newsprediction/pulse.pdf)]
 
-The score assignment gives **40%** weightage to the Word2Vec model and **60%** to the Twitter data since the scope of the former is limited to how many news sites cover the topic, while the latter provides an estimate of number of people who reacted to the topic. 
+The score assignment gives **40%** weightage to the Word2Vec model and **60%** to the Twitter data analysis for the next 7 days, since the scope of the former is limited to how many news sites cover the topic, while the latter provides an estimate of number of people who reacted to the topic. 
 
 ## References
 1. https://towardsdatascience.com/using-word2vec-to-analyze-news-headlines-and-predict-article-success-cdeda5f14751

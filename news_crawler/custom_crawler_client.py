@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+import warnings
+warnings.filterwarnings("ignore")
 from news_crawler.websites_crawler import Crawler
 
 
@@ -11,7 +13,7 @@ def create_crawler_dataframe(news_agency_list):
     return df
 
 
-def run_crawler(no_of_pages = 1):
+def run_crawler(no_of_pages = 3):
     with open('news_crawler/root_websites.txt','r') as f:
         root_sites = [ x.replace('\n','') for x in f.readlines()]
         f.close()

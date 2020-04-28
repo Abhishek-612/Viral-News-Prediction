@@ -1,5 +1,10 @@
+import nltk
 from nltk.tokenize import word_tokenize
+from textblob import TextBlob
+import warnings
+warnings.filterwarnings("ignore")
 from nltk.corpus import stopwords
+nltk.download('brown')
 
 
 def get_content_list(dataframe):
@@ -14,6 +19,13 @@ def get_content_list(dataframe):
     #     print(len(t))
     return titles_list, content_list
 
+def filter_lines(line_list):
+    new_list = list()
+    for line in line_list:
+        line_string = ' '.join(TextBlob(line).noun_phrases)
+        new_list.append((line_string))
+
+    return new_list
 
 def preprocess(text):
     text = str(text).lower()
@@ -48,12 +60,10 @@ def generate_corpus(model,word_collection):
 
 def fetch_all_words(word_collection):
     text_string = ' '.join(word_collection)
-
+    # print(len(text_string))
     tokens = word_tokenize(text_string)
-    words = [word.lower() for word in tokens if word.isalpha()]
 
-    from nltk.corpus import stopwords
-    words = list(set([word.lower() for word in words if not word.lower() in set(stopwords.words('english'))]))
+    words = list(set([word.lower() for word in tokens if word.isalpha() and not word.lower() in set(stopwords.words('english'))]))
 
     return words
 

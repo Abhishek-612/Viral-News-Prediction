@@ -26,7 +26,7 @@ class TwitterClient:
 
     self.twitter_user = twitter_user
 
-  def fetch_related_tweets(self,query, num_tweets=500):
+  def fetch_related_tweets(self,query, num_tweets=250):
     tweets = []
     import datetime
     for tweet in Cursor(self.twitter_client.search, q=query, until=datetime.date.today(), lang="en").items(num_tweets):

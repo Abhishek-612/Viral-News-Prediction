@@ -1,5 +1,5 @@
 import nltk, os
-
+import pandas as pd
 try:
     nltk.data.find('tokenizer/punkt')
 except LookupError:
@@ -10,6 +10,8 @@ except LookupError:
     nltk.download('stopwords')
 
 import numpy as np
+import warnings
+warnings.filterwarnings("ignore")
 from gensim.models import KeyedVectors, Word2Vec
 from sklearn.metrics.pairwise import cosine_similarity
 from utils import *
@@ -27,7 +29,9 @@ class ViralNewsCheck:
     def build_w2v_model(self, path=None, train_further=True, limit=None):
 
         if train_further:
-            words = fetch_all_words(self.word_collection)
+            words_collect = filter_lines(self.word_collection)
+            words = fetch_all_words(words_collect)
+
 
             print('\nStage 1/6 : Creating a new model')
             self.model = Word2Vec(size=300, min_count=1)
@@ -51,6 +55,8 @@ class ViralNewsCheck:
             self.model.train(words, total_examples=total_examples, epochs=self.model.iter)
 
             print('Stage 6/6 : Saving the new model')
+            if not os.path.exists('models'):
+                os.makedirs('models')
             self.model.wv.save(os.path.join('models','viral-news-w2v.model'))
 
         else:
@@ -80,17 +86,28 @@ class ViralNewsCheck:
         return np.array(x)
 
     def find_similar(self, title):
-        print(title+'\n')
+        print(title)
         val = cosine_similarity([self.X[self.titles.index(title)]], self.X)[0]
+        values=[]
+        associated_news=[]
 
+        if max(val) <= 0.7:
+            print('Found 0 similar headlines\n')
+            return 0
         for v in range(len(val)):
-            if val[v] in sorted(val)[-10:-1] and 0.99 > val[v] > 0.5:
+            if val[v] in sorted(val)[-10:] and 0.99 > val[v] > 0.7:
+                if len(associated_news) == 10:
+                    break
                 if v<len(self.titles):
-                    print(v, val[v], 'H', self.titles[v])
-                elif len(self.titles) <= v < len(self.titles)+len(self.content):
-                    idx = list(self.df['content']).index(self.word_collection[v])
-                    print(v, val[v], 'A', self.df['title'][idx])
+                    values.append(val[v])
+                    associated_news.append(self.titles[v])
+        if len(values) > 0:
+            if not os.path.exists('datasets/top headlines/' + title):
+                os.makedirs('datasets/top headlines/' + title)
+            df = pd.DataFrame(list(zip(values,associated_news)),index=['Title','Probablity'])
+            df.to_csv(os.path.join('datasets/top headlines/' + title, 'w2v_result.csv'), index=False)
 
-        print()
-        print('****************************')
-        print()
+        print('Found '+str(len(values))+' similar headlines\n')
+        score = len(values)*40/10
+
+        return score
