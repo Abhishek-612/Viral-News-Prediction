@@ -8,16 +8,17 @@ nltk.download('brown')
 
 
 def get_content_list(dataframe):
-    all_titles = list(dataframe['title'])
+    titles_list = list(dataframe['title'])
+    content_list = list(dataframe['content'])
 
-    all_content = list(dataframe['content'])
-
-    titles_list = [str(all_titles[x]) for x in unique(all_titles)]
-    content_list = [str(all_content[x]) for x in unique(all_content)]
-
-    # for t in titles_list:
-    #     print(len(t))
     return titles_list, content_list
+
+def get_max(li):
+    mx = min(li)
+    for l in li:
+        if 0.99 > l > mx:
+            mx = l
+    return (((mx * 10)) // 1) / 10
 
 def filter_lines(line_list):
     new_list = list()
@@ -63,7 +64,7 @@ def fetch_all_words(word_collection):
     # print(len(text_string))
     tokens = word_tokenize(text_string)
 
-    words = list(set([word.lower() for word in tokens if word.isalpha() and not word.lower() in set(stopwords.words('english'))]))
+    words = list(set([word.lower() for word in tokens if not word.lower() in set(stopwords.words('english'))]))
 
     return words
 

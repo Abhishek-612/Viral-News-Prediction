@@ -26,6 +26,6 @@ def run_crawler(no_of_pages = 3):
     df = df.dropna()
 
     # Save to csv for later use
-    if df.empty:
+    if not df.empty:
         df.to_csv(os.path.join('datasets',r'custom-crawler-data.csv'), index=False)
     return df

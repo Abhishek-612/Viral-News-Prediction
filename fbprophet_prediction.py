@@ -55,7 +55,7 @@ class FBProphetPredictor:
             p = i + len(self.data['ds'])
             if self.prediction['yhat'][p] >= prev:
                 flag = True
-                prev = self.prediction['yhat'][(p - 24) if p>24 else 0]
+                prev = self.prediction['yhat'][(p - 24) if p>24 else 0:p].mean()
                 if self.date is None:
                     self.date = self.prediction['ds'][p]
             else:
@@ -73,10 +73,10 @@ class FBProphetPredictor:
     def calc_score(self):
         if self.date is not None:
             day = self.date
-            day_delta = (self.prediction['ds'].max() - day).days
-            predicted_span = (self.prediction['ds'].max() - self.data['ds'].max()).days
+            day_delta = (self.prediction['ds'].max() - day).days + 1
+            predicted_span = (self.prediction['ds'].max() - self.data['ds'].max()).days + 1
 
-            self.score = (day_delta/predicted_span)*60
+            self.score = (day_delta/predicted_span)
 
     def get_score(self):
         return self.score

@@ -20,12 +20,12 @@ We use _Natural Language Processing_ using a ***Word2Vec*** model. Due to the li
 3. Use alternative environments such as [Google Colab](https://colab.research.google.com/). Loading in environments like JetBrains PyCharm may cause a MemoryError due to the limited amount of memory allocated to the environment. So, you may want to run the [main.py](main.py) script from the Terminal/Command Prompt
 
 ### 3. Social Media Impact Prediction
-We use [Twitter](https://developer.twitter.com/en) as the platform to detect impact as it is known for public and sensitive discussions and hence gives a good analysis of their opinions, sentiments and impact. We use Twitter data to as a Time Series data of the number of tweets and retweets, on the subject of the crawled headlines, grouped _hourly_. Since headlines are recent, there isn't much data to make an accurate prediction. Hence, we use the [Facebook's Prophet](https://facebook.github.io/prophet/) which has a robust forecasting model trained over long time data of user responses with seasonal and holiday effects.
+We use [Twitter](https://developer.twitter.com/en) as the platform to detect impact as it is known for public and sensitive discussions and hence gives a good analysis of their opinions, sentiments and impact. We use Twitter data to as a Time Series data of the number of tweets and retweets, on the subject of the crawled headlines, grouped _hourly_. Since headlines are recent, there isn't much data to make an accurate prediction. Hence, we use the [Facebook's Prophet](https://facebook.github.io/prophet/) which has a robust forecasting model trained over long time data of user responses with seasonal and holiday effects. Twitter API also has a limit on the amount of tweets retrieved in a period, hence added [TIME_SLEEP](main.py) to sleep after each iteration, for seamless execution of all headlines. For immediate results, you may also adjust [FETCH_TOP_NEWS](main.py) to limit the number of headlines to be searched on Twitter.  
 
 ## Scoring 
 Since we use two different approaches and environments to analyse the prediction, we use a scoring metric to calculate the virality. The idea of using score assignment was inspired by Roja Bandari et al [[Ref. 2](https://www.hpl.hp.com/research/scl/papers/newsprediction/pulse.pdf)]
 
-The score assignment gives **40%** weightage to the Word2Vec model and **60%** to the Twitter data analysis for the next 7 days, since the scope of the former is limited to how many news sites cover the topic, while the latter provides an estimate of number of people who reacted to the topic. 
+The score assignment gives **30%** weightage to the Word2Vec model and **70%** to the Twitter data analysis for the next 7 days, since the scope of the former is limited to how many news sites cover the topic, while the latter provides an estimate of number of people who reacted to the topic. 
 
 **_Sample output in [results](results) directory_**
 
