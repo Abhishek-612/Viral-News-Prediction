@@ -102,7 +102,7 @@ for title, score in sorted_headlines:
         tweet_score = predictor.score * TWITTER_WEIGHT * 100
         date = predictor.date
     except:
-        print('Tweepy limit exceeded, try in some time')
+        pass
 
     try:
         if not os.path.exists('results/results.csv'):
