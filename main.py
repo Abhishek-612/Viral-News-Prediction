@@ -13,10 +13,10 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-CRAWL_NEW_DATA = True
+CRAWL_NEW_DATA = False
 
 TWITTER_WEIGHT = 0.7
-TRAIN_FURTHER = True
+TRAIN_FURTHER = False
 MODEL_LIMIT = None  # 2_000_000  (only top 2 million word embeddings)
 # Line 63 has more parameters
 
