@@ -43,6 +43,8 @@ else:
     df_crawler = pd.read_csv(os.path.join('datasets', r'custom-crawler-data.csv'))
 
 df_all = pd.concat([df_news_api, df_crawler], ignore_index=True)
+df_all.drop_duplicates(inplace=True)
+df_all.dropna(inplace=True)
 
 if os.path.exists('models'):
     PATH = glob.glob('models/*.model')[0]
@@ -60,11 +62,14 @@ sorted_df_all = df_all.sort_values(by='date', ascending=False)
 
 NUM_W2V_HEADLINES = len(sorted_df_all)
 FETCH_TOP_NEWS = len(sorted_df_all)
-TIME_SLEEP = 30
+TIME_SLEEP = 60
 
 for i in range(NUM_W2V_HEADLINES):  # Adjust NUM_W2V_HEADLINES if taking too long
-    score = vnc.find_similar(sorted_df_all['title'][i])
-    headline_score[sorted_df_all['title'][i]] = score
+    try:
+        score = vnc.find_similar(sorted_df_all['title'][i])
+        headline_score[sorted_df_all['title'][i]] = score
+    except:
+        continue
 
 print('Obtained Headline Scores\nPlease check the results directory.')
 sorted_headlines = sorted(headline_score.items(), key=operator.itemgetter(1), reverse=True)[:FETCH_TOP_NEWS]
@@ -111,6 +116,6 @@ for title, score in sorted_headlines:
                 date) + '\n')
             f.close()
     except:
-        print('Please open "results.csv" after the script terminates')
+        pass
 
     time.sleep(TIME_SLEEP)

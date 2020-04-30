@@ -76,7 +76,7 @@ class FBProphetPredictor:
             day_delta = (self.prediction['ds'].max() - day).days + 1
             predicted_span = (self.prediction['ds'].max() - self.data['ds'].max()).days + 1
 
-            self.score = (day_delta/predicted_span)
+            self.score = (day_delta/predicted_span) if (day_delta/predicted_span)<1 else 1
 
     def get_score(self):
         return self.score

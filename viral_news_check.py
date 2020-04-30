@@ -23,7 +23,6 @@ class ViralNewsCheck:
 
     def __init__(self, df):
         self.df = df
-        self.df.drop_duplicates(inplace=True)
         self.titles, self.content = get_content_list(self.df)
         self.word_collection = list()
         self.word_collection.extend(self.titles)

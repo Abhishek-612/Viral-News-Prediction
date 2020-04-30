@@ -39,7 +39,7 @@ def get_articles(headlines_df):
     import datetime
 
     today = datetime.datetime.today()
-    before_15_days = today - datetime.timedelta(15)
+    before_10_days = today - datetime.timedelta(10)
 
     with requests.Session() as session:
         all_articles = []
@@ -47,7 +47,7 @@ def get_articles(headlines_df):
             try:
                 articles = newsapi.get_everything(q=headline['title'],
                                                   from_param=today.strftime('%Y-%m-%d'),
-                                                  to=before_15_days.strftime('%Y-%m-%d'),
+                                                  to=before_10_days.strftime('%Y-%m-%d'),
                                                   language='en',
                                                   sort_by='relevancy')
                 all_articles.append(articles)

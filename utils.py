@@ -8,8 +8,8 @@ nltk.download('brown')
 
 
 def get_content_list(dataframe):
-    titles_list = list(dataframe['title'])
-    content_list = list(dataframe['content'])
+    titles_list = list(str(x) for x in dataframe['title'] if x )
+    content_list = list(str(x) for x in dataframe['content'])
 
     return titles_list, content_list
 
@@ -64,7 +64,7 @@ def fetch_all_words(word_collection):
     # print(len(text_string))
     tokens = word_tokenize(text_string)
 
-    words = list(set([word.lower() for word in tokens if not word.lower() in set(stopwords.words('english'))]))
+    words = list(set([str(word).lower() for word in tokens if not word.lower() in set(stopwords.words('english'))]))
 
     return words
 

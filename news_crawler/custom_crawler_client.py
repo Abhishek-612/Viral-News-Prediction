@@ -22,7 +22,7 @@ def run_crawler(no_of_pages = 3):
     news_agency_list = crawler.get_news_agency_list()
 
     df = create_crawler_dataframe(news_agency_list)
-    df = df.drop_duplicates()
+    df.drop_duplicates(inplace=True)
     df = df.dropna()
 
     # Save to csv for later use
