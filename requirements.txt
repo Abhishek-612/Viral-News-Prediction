@@ -4,7 +4,7 @@ fbprophet==0.6
 textblob==0.15.3
 pandas==1.0.3
 lxml==4.5.0
-numpy==1.15.4
+numpy==1.22.0
 gensim==3.8.2
 matplotlib==3.2.1
 tweepy==3.8.0
