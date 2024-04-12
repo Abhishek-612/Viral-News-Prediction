@@ -1,4 +1,4 @@
-import nltk, os,re
+import nltk, os, re
 import pandas as pd
 try:
     nltk.data.find('tokenizer/punkt')
@@ -15,6 +15,8 @@ warnings.filterwarnings("ignore")
 from gensim.models import KeyedVectors, Word2Vec
 from sklearn.metrics.pairwise import cosine_similarity
 from utils import *
+import gensim.downloader as api
+import tempfile
 
 
 MIN_LIMIT = 0.05
@@ -34,7 +36,7 @@ class ViralNewsCheck:
             words = fetch_all_words(self.word_collection)
 
             print('\nStage 1/6 : Creating a new model')
-            self.model = Word2Vec(size=300, min_count=1)
+            self.model = Word2Vec(vector_size=300, min_count=1)
 
             print('Stage 2/6 : Building vocabulary for custom corpus')
             self.model.build_vocab(words)
@@ -42,14 +44,13 @@ class ViralNewsCheck:
 
             print('Stage 3/6 : Loading pre-trained vectors')
             if path is None:
-                model_old = KeyedVectors.load_word2vec_format("https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz", binary=True,limit=limit)
+                wv = api.load('word2vec-google-news-300')
+                model_old = wv
             else:
                 model_old = KeyedVectors.load(path)
 
             print('Stage 4/6 : Building vocabulary of the pre-trained model\'s words')
-            self.model.build_vocab([list(model_old.wv.vocab.keys())], update=True)
-            if path is None:
-                self.model.intersect_word2vec_format("https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz", binary=True, lockf=1.0)
+            self.model.build_vocab([list(model_old.key_to_index.keys())], update=True)
 
             print('Stage 5/6 : Training the new model')
             self.model.train(words, total_examples=total_examples, epochs=10)
@@ -63,7 +64,7 @@ class ViralNewsCheck:
             print('\nNot training new words (Add parameter train_further = True in order to do so)')
             print('Stage 1/1 : Loading pre-trained vectors')
             if path is None:
-                self.model = KeyedVectors.load_word2vec_format("https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz", binary=True,limit=limit)
+                self.model = api.load('word2vec-google-news-300')
             else:
                 self.model = KeyedVectors.load(path)
 
@@ -75,8 +76,8 @@ class ViralNewsCheck:
         self.X = self.get_document_vectors(corpus)
 
     def generate_document_vector(self, doc):
-        doc = [word for word in doc if word in self.model.wv.vocab]
-        return np.mean(self.model[doc], axis=0)
+        doc = [word for word in doc if word in self.model.wv.index_to_key]
+        return np.mean(self.model.wv[doc], axis=0)
 
     def get_document_vectors(self,corpus):
         x = list()

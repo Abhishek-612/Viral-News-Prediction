@@ -5,7 +5,7 @@ from textblob import TextBlob
 from viral_news_check import ViralNewsCheck
 from news_crawler import custom_crawler_client, news_api_client
 from twitter_crawler import TwitterClient, TweetAnalyser
-from fbprophet_prediction import FBProphetPredictor
+from prophet import Prophet
 import nltk
 
 nltk.download('brown')
@@ -13,11 +13,11 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-CRAWL_NEW_DATA = True
+CRAWL_NEW_DATA = False
 
 TWITTER_WEIGHT = 0.7
 TRAIN_FURTHER = True
-MODEL_LIMIT = None  # 2_000_000  (only top 2 million word embeddings)
+MODEL_LIMIT = 2_000_000 #None  # 2_000_000  (only top 2 million word embeddings)
 # Line 63 has more parameters
 
 
@@ -97,7 +97,7 @@ for title, score in sorted_headlines:
             os.makedirs('results/top headlines/' + dir_name)
         df.to_csv(os.path.join('results/top headlines/' + dir_name, 'tweets.csv'), index=False)
 
-        predictor = FBProphetPredictor(df)
+        predictor = Prophet(df)
         predictor.predict(title)
         tweet_score = predictor.score * TWITTER_WEIGHT * 100
         date = predictor.date

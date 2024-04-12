@@ -8,6 +8,15 @@ The project is divided in _three_ distinct components -
 2. **Detection of similar headlines**
 3. **Social Media Impact Prediction (Twitter)**
 
+## [UPDATE]
+In September 2023, Twitter revoked the Free Tier Access to its APIs allowing only the options to post/delete tweets, and no search/read options. 
+
+However, I have updated the code base to work with Twitter API v2.0. All you need is the BEARER_TOKEN and ACCESS_TOKEN (KEY and SECRET). I encourage any user with an API access to a higher tier to test out the twitter module, and raise appropriate issues, if you notice any. Thanks!
+
+**Topic Modelling is still functional, you may use it without any restrictions [requires NewsAPI API Key]. You may continue using the sample dataset from the repository instead, but the information was crawled in 2020.**
+
+## Project Details
+
 ### 1. News Crawler
 The project implements two different methods of scraping news from the internet. The first is performed using the [News API](https://newsapi.org/). The second is a custom crawler but it can only fetch headlines from two websites currently, i.e.- NDTV and Times of India. However, it fetches news from all subsidaries of the domains, and will be updated soon for more. The custom crawler can adjust the number of pages to be scraped from the [main.py](main.py) file. The project uses both the crawling scripts since the latter has limited scope while the former may be limited by request rates of the API.
 

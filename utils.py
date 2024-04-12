@@ -37,7 +37,7 @@ def preprocess(text):
 
 
 def has_vector_representation(word2vec_model, doc):
-    return not all(word not in word2vec_model.wv.vocab for word in doc)
+    return not all(word not in word2vec_model.wv.index_to_key for word in doc)
 
 
 def filter_docs(corpus, texts, condition_on_doc):
