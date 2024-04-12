@@ -1,6 +1,7 @@
-# Insert API Key
-NEWS_API_KEY = '0b74da0a4fd14dfb9500bcc33685ba6d'
+# Insert API Keys
+NEWS_API_KEY = ''
 
+# X.com (Twitter)
 BEARER_TOKEN = ''
 ACCESS_TOKEN = ''
 ACCESS_TOKEN_SECRET = ''
